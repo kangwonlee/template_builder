@@ -22,3 +22,19 @@ git commit -m "initial commit"
 git remote add origin <new remote repository>
 git push origin
 """
+
+
+import argparse
+import configparser
+import subprocess
+import typing
+import urllib.parse as up
+
+
+def get_arg_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Template builder")
+    parser.add_argument("-s", "--src_repo_url", type=str, help=f"URL to source development repository")
+    parser.add_argument("-r", "--reference", type=str, default='master', help="Reference of source repository")
+    parser.add_argument("-n", "--new_empty_folder", type=str, help="New empty folder")
+    parser.add_argument("-d", "--dest_repo_url", type=str, help="URL to source development repository")
+    return parser
