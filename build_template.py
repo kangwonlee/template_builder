@@ -1,4 +1,11 @@
 """
+# Template builder
+
+Out of an existing development repository, 
+build a template repostiory with just one commit.
+
+## Procedure example
+
 git clone <existing remote repository>
 pushd <local repository>
 git switch <reference>
