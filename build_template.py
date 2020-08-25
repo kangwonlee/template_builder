@@ -26,6 +26,7 @@ git push origin
 
 import argparse
 import configparser
+import dataclasses
 import subprocess
 import sys
 import typing
