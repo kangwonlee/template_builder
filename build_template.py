@@ -71,6 +71,10 @@ class Git(object):
         assert not os.path.exists(dest_folder), f"destination folder {dest_folder} exists"
         return self.run_list(['clone', source_url, dest_folder])
 
+    def checkout(self, local_repo_path:str, ref:str='master'):
+        assert os.path.exists(local_repo_path)
+        return self.run_list(['checkout', ref], cwd=local_repo_path)
+
 
 def main(argv:List[str]=sys.argv):
     parser = get_arg_parser()
