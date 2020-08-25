@@ -80,6 +80,12 @@ class Git(object):
         assert not os.listdir(dest_path), f"Destination folder {dest_path} not empty\n{os.listdir(dest_path)}"
         return self.run_list(['init'], cwd=dest_path)
 
+    def add_all(self, dest_path:str):
+        assert os.path.exists(dest_path)
+        assert (('.git' in os.listdir(dest_path)) and os.path.isdir(os.path.join(dest_path, '.git'))), f"Destination folder does not have '.git/'"
+        return self.run_list(['add', '--all'], cwd=dest_path)
+
+
 
 def main(argv:List[str]=sys.argv):
     parser = get_arg_parser()
