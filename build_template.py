@@ -31,7 +31,18 @@ import subprocess
 import sys
 import typing
 import urllib.parse as up
-from typing import List
+from typing import List, Union
+
+
+@dataclasses.dataclass
+class Git(object):
+    git_cmd:str='git'
+
+    def run_list(self, arg_list:List[str]) -> subprocess.CompletedProcess:
+        return subprocess.run([self.git_cmd] + arg_list, capture_output=subprocess.PIPE, check=True)
+
+    def status(self) -> str:
+        return self.run_list(['status']).stdout.decode()
 
 
 def main(argv:List[str]=sys.argv):
