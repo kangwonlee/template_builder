@@ -27,8 +27,15 @@ git push origin
 import argparse
 import configparser
 import subprocess
+import sys
 import typing
 import urllib.parse as up
+from typing import List
+
+
+def main(argv:List[str]=sys.argv):
+    parser = get_arg_parser()
+    parsed = parser.parse_args(argv[1:])
 
 
 def get_arg_parser() -> argparse.ArgumentParser:
@@ -38,3 +45,7 @@ def get_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("-n", "--new_empty_folder", type=str, help="New empty folder")
     parser.add_argument("-d", "--dest_repo_url", type=str, help="URL to source development repository")
     return parser
+
+
+if "__main__" == __name__:
+    main(sys.argv)
