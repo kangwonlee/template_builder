@@ -4,6 +4,24 @@
 Out of an existing development repository, 
 build a template repostiory with just one commit.
 
+## Arguments
+
+usage: build_template.py [-h] [-s SRC_REPO_URL] [-r REFERENCE]
+                         [-n NEW_EMPTY_FOLDER] [-d DEST_REPO_URL]
+
+Template builder
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -s SRC_REPO_URL, --src_repo_url SRC_REPO_URL
+                        URL to source development repository
+  -r REFERENCE, --reference REFERENCE
+                        Reference of source repository
+  -n NEW_EMPTY_FOLDER, --new_empty_folder NEW_EMPTY_FOLDER
+                        New empty folder
+  -d DEST_REPO_URL, --dest_repo_url DEST_REPO_URL
+                        URL to source development repository
+
 ## Procedure example
 
 git clone <existing remote repository>
@@ -53,6 +71,7 @@ def main(argv:List[str]=sys.argv):
 def get_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Template builder")
     parser.add_argument("-s", "--src_repo_url", type=str, help=f"URL to source development repository")
+    parser.add_argument("-c", "--clone_folder", type=str, help=f"Clone the source development repository to here")
     parser.add_argument("-r", "--reference", type=str, default='master', help="Reference of source repository")
     parser.add_argument("-n", "--new_empty_folder", type=str, help="New empty folder")
     parser.add_argument("-d", "--dest_repo_url", type=str, help="URL to source development repository")
