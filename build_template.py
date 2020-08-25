@@ -75,6 +75,11 @@ class Git(object):
         assert os.path.exists(local_repo_path)
         return self.run_list(['checkout', ref], cwd=local_repo_path)
 
+    def init(self, dest_path:str):
+        assert os.path.exists(dest_path)
+        assert not os.listdir(dest_path), f"Destination folder {dest_path} not empty\n{os.listdir(dest_path)}"
+        return self.run_list(['init'], cwd=dest_path)
+
 
 def main(argv:List[str]=sys.argv):
     parser = get_arg_parser()
