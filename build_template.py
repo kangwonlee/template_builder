@@ -85,6 +85,11 @@ class Git(object):
         assert (('.git' in os.listdir(dest_path)) and os.path.isdir(os.path.join(dest_path, '.git'))), f"Destination folder does not have '.git/'"
         return self.run_list(['add', '--all'], cwd=dest_path)
 
+    def commit(self, dest_path:str, message:str='initial commit'):
+        assert os.path.exists(dest_path)
+        assert (('.git' in os.listdir(dest_path)) and os.path.isdir(os.path.join(dest_path, '.git'))), f"Destination folder does not have '.git/'"
+        return self.run_list(['commit', '--message', message], cwd=dest_path)
+
 
 
 def main(argv:List[str]=sys.argv):
