@@ -57,8 +57,12 @@ from typing import List, Union
 class Git(object):
     git_cmd:str='git'
 
-    def run_list(self, arg_list:List[str]) -> subprocess.CompletedProcess:
-        return subprocess.run([self.git_cmd] + arg_list, capture_output=subprocess.PIPE, check=True)
+    def run_list(self, arg_list:List[str], cwd=None) -> subprocess.CompletedProcess:
+        return subprocess.run(
+            [self.git_cmd] + arg_list,
+            capture_output=subprocess.PIPE, check=True,
+            cwd=cwd,
+        )
 
     def status(self) -> str:
         return self.run_list(['status']).stdout.decode()
