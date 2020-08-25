@@ -45,6 +45,7 @@ git push origin
 import argparse
 import configparser
 import dataclasses
+import os
 import subprocess
 import sys
 import typing
@@ -61,6 +62,10 @@ class Git(object):
 
     def status(self) -> str:
         return self.run_list(['status']).stdout.decode()
+
+    def clone(self, source_url, dest_folder):
+        assert not os.path.exists(dest_folder), f"destination folder {dest_folder} exists"
+        return self.run_list(['clone', source_url, dest_folder])
 
 
 def main(argv:List[str]=sys.argv):
