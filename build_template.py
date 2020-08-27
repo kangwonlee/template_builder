@@ -96,10 +96,10 @@ class Git(object):
         assert (('.git' in os.listdir(new_repo_path)) and os.path.isdir(os.path.join(new_repo_path, '.git'))), f"Destination folder {new_repo_path} does not have '.git/'"
         return self.run_list(['remote', 'add', remote_name, remote_url], cwd=new_repo_path)
 
-    def push(self, new_repo_path:str, remote_name:str='origin'):
+    def push(self, new_repo_path:str, repo_url:str, ref:str='master'):
         assert os.path.exists(new_repo_path)
         assert (('.git' in os.listdir(new_repo_path)) and os.path.isdir(os.path.join(new_repo_path, '.git'))), f"Destination folder {new_repo_path} does not have '.git/'"
-        return self.run_list(['push', remote_name], cwd=new_repo_path)
+        return self.run_list(['push', repo_url, ref], cwd=new_repo_path)
 
 
 def main(argv:List[str]=sys.argv):
@@ -144,8 +144,7 @@ def build_template(src_url:str, src_repo_folder:str, src_ref:str, dest_folder:st
     git.commit(dest_folder)
 
     if dest_url is not None:
-        git.remote_add(dest_folder, dest_url, 'origin')
-        git.push(dest_folder, 'origin')
+        git.push(dest_folder, dest_url)
 
 
 def get_arg_parser() -> argparse.ArgumentParser:
