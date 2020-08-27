@@ -107,7 +107,7 @@ def main(argv:List[str]=sys.argv):
     parsed = parser.parse_args(argv[1:])
 
 
-def build_template(src_url:str, src_repo_folder:str, src_ref:str, dest_folder:str, dest_url:str):
+def build_template(src_url:str, src_repo_folder:str, src_ref:str, dest_folder:str, dest_url:str=None):
 
     assert up.urlparse(src_url), f"unable to parse {src_url}"
 
@@ -134,6 +134,10 @@ def build_template(src_url:str, src_repo_folder:str, src_ref:str, dest_folder:st
     git.add_all(dest_folder)
 
     git.commit(dest_folder)
+
+    if dest_url is not None:
+        git.remote_add(dest_folder, dest_url, 'origin')
+        git.push(dest_folder, 'origin')
 
 
 def get_arg_parser() -> argparse.ArgumentParser:
