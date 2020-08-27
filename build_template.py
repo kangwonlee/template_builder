@@ -107,6 +107,35 @@ def main(argv:List[str]=sys.argv):
     parsed = parser.parse_args(argv[1:])
 
 
+def build_template(src_url:str, src_repo_folder:str, src_ref:str, dest_folder:str, dest_url:str):
+
+    assert up.urlparse(src_url), f"unable to parse {src_url}"
+
+    parsed_url = up.urlparse(src_url.strip('/'))
+    print(parsed_url.path.split('/')[-1])
+
+    assert not os.path.exists(src_repo_folder), f"folder already exists : {src_repo_folder}"
+    assert not os.path.exists(dest_folder), f"folder already exists : {dest_folder}"
+
+    git = Git()
+
+    git.clone(src_url, src_repo_folder)
+
+    assert os.path.exists(src_repo_folder), f"git clone folder does not exist : {src_repo_folder}"
+
+    git.checkout(src_repo_folder, src_ref)
+
+    os.makedirs(dest_folder)
+
+    git.init(dest_folder)
+
+    copy_repo(src_repo_folder, dest_folder)
+
+    git.add_all(dest_folder)
+
+    git.commit(dest_folder)
+
+
 def get_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Template builder")
     parser.add_argument("-s", "--src_repo_url", type=str, help=f"URL to source development repository")
