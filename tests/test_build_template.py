@@ -1,5 +1,8 @@
 import argparse
+import itertools
 import os
+import random
+import subprocess
 import sys
 import tempfile
 
@@ -44,6 +47,69 @@ def test_get_arg_parser_arguments(parser):
     assert parsed.reference == ref
     assert parsed.new_empty_folder == new_folder
     assert parsed.dest_repo_url == dest_url
+
+
+def test_copy_repo():
+    with tempfile.TemporaryDirectory(suffix='.src') as source_repo_folder:
+        # prepare source repo
+
+        subprocess.check_call(['git', 'init'], cwd=source_repo_folder)
+        subprocess.check_call(['git', 'config', 'user.name', 'source'], cwd=source_repo_folder)
+        subprocess.check_call(['git', 'config', 'user.email', 'source@testing.io'], cwd=source_repo_folder)
+
+        source_files = []
+
+        for _ in itertools.repeat(None, random.randint(3, 9)):
+
+            filename = f'file_{random.randint(0, 99):02d}.txt'
+
+            with open(os.path.join(source_repo_folder, filename), 'wt', encoding='utf-8') as f:
+                f.write(
+                    str(
+                        random.choices(
+                            list(range(100)),
+                            k=10
+                        )
+                    )
+                )
+                f.write('\n')
+
+            assert os.path.exists(
+                os.path.join(source_repo_folder, filename)
+            ), f"test file {filename} not created in {source_repo_folder}"
+
+            source_files.append(filename)
+
+            subprocess.check_call(['git', 'add', filename], cwd=source_repo_folder)
+            subprocess.check_call(['git', 'commit', '-m', filename], cwd=source_repo_folder)
+        # source now prepared
+
+        # prepare a destination repo
+        with tempfile.TemporaryDirectory(suffix='.dest') as destination_repo_folder:
+            subprocess.check_call(['git', 'init'], cwd=destination_repo_folder)
+            subprocess.check_call(['git', 'config', 'user.name', 'destination'], cwd=source_repo_folder)
+            subprocess.check_call(['git', 'config', 'user.email', 'destination@testing.io'], cwd=destination_repo_folder)
+        # destination now prepared
+
+            # function under test
+            bt.copy_repo(source_repo_folder, destination_repo_folder)
+
+            # all files copied?
+            for src_file in source_files:
+                assert src_file in os.listdir(destination_repo_folder), f"File {source_repo_folder} missing in destination folder"
+
+            # number of commits
+            r = subprocess.check_output(
+                ('git', 'log', '--oneline', '--all'),
+                cwd=destination_repo_folder,
+                encoding='utf-8'
+            )
+            assert 1 > len(r.splitlines()), f"Destination repository has no commit\n{r}"
+            assert 1 < len(r.splitlines()), f"Destination repository has more than one commit\n{r}"
+
+        pass
+
+    pass
 
 
 if "__main__" == __name__:
