@@ -123,13 +123,22 @@ def copy_repo(src_repo_path:str, dest_repo_path:str):
     assert os.path.exists(dest_repo_path), f"Destination folder {dest_repo_path} does not exist"
     assert (('.git' in os.listdir(dest_repo_path)) and os.path.isdir(os.path.join(dest_repo_path, '.git'))), f"Destination folder {dest_repo_path} does not have '.git/'"
 
-    return shutil.copytree(
-        src_repo_path,
-        dest_repo_path,
-        ignore=shutil.ignore_patterns(
-            os.path.join('*', os.sep, ".git", os.sep, '*'),
-        )
-    )
+    for src_root, _, src_filenames in os.walk(src_repo_path):
+        if '.git' not in src_root.split(os.sep):
+
+            rel_path = os.path.relpath(src_repo_path, src_root)
+
+            dest_root = os.path.join(dest_repo_path, rel_path)
+
+            os.makedirs(dest_root, exist_ok=True)
+
+            for filename in src_filenames:
+                dest_filename = os.path.join(dest_repo_path, filename)
+
+                shutil.copy(
+                    os.path.join(src_root, filename),
+                    dest_filename,
+                )
 
 
 if "__main__" == __name__:
