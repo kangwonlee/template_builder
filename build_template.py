@@ -142,7 +142,7 @@ def get_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("-c", "--clone_folder", type=str, help=f"Clone the source development repository to here")
     parser.add_argument("-r", "--reference", type=str, default='master', help="Reference of source repository")
     parser.add_argument("-n", "--new_empty_folder", type=str, help="New empty folder")
-    parser.add_argument("-d", "--dest_repo_url", type=str, help="URL to source development repository")
+    parser.add_argument("-d", "--dest_repo_url", type=str, default=None, help="URL to source development repository")
     return parser
 
 
