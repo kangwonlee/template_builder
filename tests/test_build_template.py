@@ -5,6 +5,7 @@ import random
 import subprocess
 import sys
 import tempfile
+import urllib.parse as up
 
 import pytest
 
@@ -98,6 +99,38 @@ def test_copy_repo(tmpdir_factory):
     # all files copied?
     for src_file in source_files:
         assert src_file in os.listdir(destination_repo_folder), f"File {src_file} missing in destination folder"
+
+
+@pytest.fixture
+def source_repo_url() -> str:
+    return up.urlunparse(
+        ('https', 'github.com', 'kangwonlee/to_test_template_builder', None, None, None)
+    )
+
+def test_build_template(tmp_path, source_repo_url):
+
+    source_folder = os.path.join(tmp_path, 'source')
+    assert not os.path.exists(source_folder)
+
+    destination_folder = os.path.join(tmp_path, 'destination')
+    assert not os.path.exists(destination_folder)
+
+    bt.build_template(
+        source_repo_url,
+        source_folder,
+        'master',
+        destination_folder,
+        'None'
+    )
+
+    assert os.path.exists(source_folder)
+    assert os.path.exists(destination_folder)
+
+    commit_log_message = subprocess.check_output(['git', 'log', '--oneline', '--all'], cwd=destination_folder)
+    assert 1 == len(commit_log_message.splitlines()), (
+        'more than one commit\n',
+        commit_log_message
+    )
 
 
 if "__main__" == __name__:
