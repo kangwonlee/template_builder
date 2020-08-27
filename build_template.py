@@ -46,6 +46,7 @@ import argparse
 import configparser
 import dataclasses
 import os
+import shutil
 import subprocess
 import sys
 import typing
@@ -109,6 +110,18 @@ def get_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("-n", "--new_empty_folder", type=str, help="New empty folder")
     parser.add_argument("-d", "--dest_repo_url", type=str, help="URL to source development repository")
     return parser
+
+
+def copy_repo(src_repo_path:str, dest_repo_path:str):
+    assert os.path.exists(src_repo_path), f"Source folder {src_repo_path} does not exist"
+    assert (('.git' in os.listdir(src_repo_path)) and os.path.isdir(os.path.join(src_repo_path, '.git'))), f"Source folder {src_repo_path} does not have '.git/'"
+    assert os.path.exists(dest_repo_path), f"Destination folder {dest_repo_path} does not exist"
+    assert (('.git' in os.listdir(dest_repo_path)) and os.path.isdir(os.path.join(dest_repo_path, '.git'))), f"Destination folder {dest_repo_path} does not have '.git/'"
+
+    def ignore_git(folder):
+        return '.git' in folder.split(os.sep)
+
+    return shutil.copytree(src_repo_path, dest_repo_path, ignore=ignore_git)
 
 
 if "__main__" == __name__:
