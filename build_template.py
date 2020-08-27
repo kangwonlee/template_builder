@@ -106,6 +106,14 @@ def main(argv:List[str]=sys.argv):
     parser = get_arg_parser()
     parsed = parser.parse_args(argv[1:])
 
+    build_template(
+        parsed.src_repo_url,
+        parsed.clone_folder,
+        parsed.reference,
+        parsed.new_empty_folder,
+        parsed.dest_repo_url,
+    )
+
 
 def build_template(src_url:str, src_repo_folder:str, src_ref:str, dest_folder:str, dest_url:str=None):
 
