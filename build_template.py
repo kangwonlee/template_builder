@@ -90,6 +90,10 @@ class Git(object):
         assert (('.git' in os.listdir(dest_path)) and os.path.isdir(os.path.join(dest_path, '.git'))), f"Destination folder does not have '.git/'"
         return self.run_list(['commit', '--message', message], cwd=dest_path)
 
+    def remote_add(self, new_repo_path:str, remote_url:str, remote_name:str='origin'):
+        assert os.path.exists(new_repo_path)
+        assert (('.git' in os.listdir(new_repo_path)) and os.path.isdir(os.path.join(new_repo_path, '.git'))), f"Destination folder {new_repo_path} does not have '.git/'"
+        return self.run_list(['remote', 'add', remote_name, remote_url], cwd=new_repo_path)
 
 
 def main(argv:List[str]=sys.argv):
