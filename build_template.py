@@ -173,7 +173,15 @@ def copy_repo(src_repo_path:str, dest_repo_path:str):
             os.makedirs(dest_root, exist_ok=True)
 
             for filename in src_filenames:
-                dest_filename = os.path.join(dest_repo_path, filename)
+                dest_filename = os.path.join(dest_root, filename)
+
+                assert (
+                    os.path.relpath(
+                        dest_repo_path, dest_filename
+                    ) == os.path.relpath(
+                        src_repo_path, os.path.join(src_root, filename)
+                    )
+                )
 
                 shutil.copy(
                     os.path.join(src_root, filename),
