@@ -183,6 +183,17 @@ def copy_repo(src_repo_path:str, dest_repo_path:str):
                     ) == os.path.relpath(
                         src_repo_path, os.path.join(src_root, filename)
                     )
+                ), (
+                    "\n"
+                    f"src_root\t= {src_repo_path}\n"
+                    f"src_root\t= {src_root}\n"
+                    f"rel_path\t= {rel_path}\n"
+                    f"source\t= {os.path.join(src_root, filename)}\n"
+                    f"dest_root\t= {dest_root}\n"
+                    f"filename\t= {filename}\n"
+                    f"dest_filename\t= {dest_filename}\n"
+                    f"source rel\t= {os.path.relpath(src_repo_path, os.path.join(src_root, filename))}\n"
+                    f"dest rel\t= {os.path.relpath(dest_repo_path, dest_filename)}\n"
                 )
 
                 shutil.copy(
