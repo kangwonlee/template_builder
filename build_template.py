@@ -168,6 +168,8 @@ def copy_repo(src_repo_path:str, dest_repo_path:str):
 
             rel_path = os.path.relpath(src_root, src_repo_path)
 
+            assert os.pardir not in rel_path.split(os.sep)
+
             dest_root = os.path.join(dest_repo_path, rel_path)
 
             os.makedirs(dest_root, exist_ok=True)
