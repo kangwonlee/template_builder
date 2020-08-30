@@ -166,7 +166,7 @@ def copy_repo(src_repo_path:str, dest_repo_path:str):
     for src_root, _, src_filenames in os.walk(src_repo_path):
         if '.git' not in src_root.split(os.sep):
 
-            rel_path = os.path.relpath(src_repo_path, src_root)
+            rel_path = os.path.relpath(src_root, src_repo_path)
 
             dest_root = os.path.join(dest_repo_path, rel_path)
 
