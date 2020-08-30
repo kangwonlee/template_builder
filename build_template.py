@@ -108,9 +108,9 @@ def main(argv:List[str]=sys.argv):
 
     build_template(
         parsed.src_repo_url,
-        parsed.clone_folder,
+        os.path.abspath(parsed.clone_folder),
         parsed.reference,
-        parsed.new_empty_folder,
+        os.path.abspath(parsed.new_empty_folder),
         parsed.dest_repo_url,
     )
 
@@ -166,7 +166,9 @@ def copy_repo(src_repo_path:str, dest_repo_path:str):
     for src_root, _, src_filenames in os.walk(src_repo_path):
         if '.git' not in src_root.split(os.sep):
 
-            rel_path = os.path.relpath(src_repo_path, src_root)
+            rel_path = os.path.relpath(src_root, src_repo_path)
+
+            assert os.pardir not in rel_path.split(os.sep)
 
             dest_root = os.path.join(dest_repo_path, rel_path)
 
@@ -181,6 +183,17 @@ def copy_repo(src_repo_path:str, dest_repo_path:str):
                     ) == os.path.relpath(
                         src_repo_path, os.path.join(src_root, filename)
                     )
+                ), (
+                    "\n"
+                    f"src_root\t= {src_repo_path}\n"
+                    f"src_root\t= {src_root}\n"
+                    f"rel_path\t= {rel_path}\n"
+                    f"source\t= {os.path.join(src_root, filename)}\n"
+                    f"dest_root\t= {dest_root}\n"
+                    f"filename\t= {filename}\n"
+                    f"dest_filename\t= {dest_filename}\n"
+                    f"source rel\t= {os.path.relpath(src_repo_path, os.path.join(src_root, filename))}\n"
+                    f"dest rel\t= {os.path.relpath(dest_repo_path, dest_filename)}\n"
                 )
 
                 shutil.copy(
