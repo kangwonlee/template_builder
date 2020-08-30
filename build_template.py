@@ -108,9 +108,9 @@ def main(argv:List[str]=sys.argv):
 
     build_template(
         parsed.src_repo_url,
-        parsed.clone_folder,
+        os.path.abspath(parsed.clone_folder),
         parsed.reference,
-        parsed.new_empty_folder,
+        os.path.abspath(parsed.new_empty_folder),
         parsed.dest_repo_url,
     )
 
